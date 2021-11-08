@@ -70,7 +70,7 @@ fclean: clean
 re: fclean all
 
 run:
-	make && ./pipex file1.txt "grep Este" "wc" file2.txt
+	make && ./pipex file1.txt "grep arquivo" "tr a b" "tr b c" file2.txt
 
 #run_bonus:
 
