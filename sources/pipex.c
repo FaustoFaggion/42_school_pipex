@@ -1,86 +1,96 @@
 #include "pipex.h"
 #include <stdio.h>
-/*
-int	create_pipe(int fd[])
+
+void	ft_clear_split(char **ptr)
 {
+	int	i;
+
+	i = -1;
+	while (ptr[++i])
+		free(ptr[i]);
+	free(ptr);
+}
+
+int	fill_p(t_cmd *p, int argc, char *argv[])
+{
+	p->my_argc = argc;
+	p->my_argv = argv;
+	p->file1 = open(p->my_argv[1], O_RDONLY);
+	if (p->file1 == -1)
+		printf("erro open file1");
+	p->file2 = open(p->my_argv[argc - 1], O_RDWR);
+	if (p->file2 == -1)
+		printf("erro open file1");
+	return (0);
+}
+
+int	create(t_cmd *p, int fd[], int x)
+{
+	int	pid;
+
 	if (pipe(fd) == -1)
 		return (1);
-	return(0);
-}
-
-int	create_fork()
-{
-	int pid;
-
-	pid =  fork();
+	pid = fork();
 	if (pid < 0)
 		return (2);
+	if (x != 0)
+	{
+		free(p->exec_arg1);
+		ft_clear_split(p->exec_arg2);
+	}
+	p->exec_arg2 = ft_split(p->my_argv[x + 2], ' ');
+	p->exec_arg1 = ft_strjoin("/usr/bin/", p->exec_arg2[0]);
 	return (pid);
 }
-*/
-char	child(char *argv[], int fd[], int x)
+
+int	exec_child(t_cmd *p, int fd[], int x)
 {
-	int			file;
-	char		*exec_arg1;
-	char		**exec_arg2;
-
-	exec_arg2 = ft_split(argv[x + 2], ' ');
-	exec_arg1 = ft_strjoin("/usr/bin/", exec_arg2[0]);
-
-	printf("%s\n", exec_arg1);
 	close(fd[0]);
 	if (x == 0)
 	{
-		file = open(argv[x + 1], O_RDONLY);
-		dup2(file, STDIN_FILENO);
-	}
-	//if (x != argc - 4)
+		dup2(p->file1, STDIN_FILENO);
 		dup2(fd[1], STDOUT_FILENO);
+	}
+	else if (x == 1)
+	{
+		dup2(p->file2, STDOUT_FILENO);
+	}
 	close(fd[1]);
-	if (execve(exec_arg1, exec_arg2, NULL) < 0)
+	if (execve(p->exec_arg1, p->exec_arg2, NULL) < 0)
 		return (5);
-	return(0);
+	return (0);
 }
 
-void	parent(int fd[], int argc, int x, char	*argv[])
+void	finish_parent(t_cmd *p, int fd[], int pid1, int pid2)
 {
-	int		n;
-	char	str[200];
-	int		file;
-
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		if (x == argc - 4)
-		{
-			read(fd[0], str, 200);
-			file = open(argv[argc - 1], O_WRONLY); 
-			n = ft_strlen(str);
-			write(file, str, n);
-		}
-		close(fd[0]);
-		x++;
+	waitpid(pid1, NULL, 0);
+	waitpid(pid2, NULL, 0);
+	ft_clear_split(p->exec_arg2);
+	free(p->exec_arg1);
+	close(fd[1]);
+	close(fd[0]);
+	printf("Finish parent\n");
 }
 
-// ./pipex file1.txt "grep Este" "cat" "wc" file2.txt (Atualizar Makefile)
 int	main(int argc, char *argv[])
 {
+	t_cmd		p;
 	int			fd[2];
-	int			pid;
-	int			x;
+	int			pid1;
+	int			pid2;
 
-	x = 0;
-	while ( x < argc - 3)
-	{
-		if (pipe(fd) == -1)
+	if (argc != 5)
 		return (1);
-		pid =  fork();
-		if (pid < 0)
-			return (2);
-		if (pid == 0)
-			child(argv, fd, x);	
-		waitpid(pid, NULL, 0);
-		parent(fd, argc, x, argv);
-		x++;
-	}
+	fill_p(&p, argc, argv);
+	pid1 = create(&p, fd, 0);
+	if (pid1 == 0)
+		exec_child(&p, fd, 0);
+	close(fd[1]);
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	pid2 = create(&p, fd, 1);
+	if (pid2 == 0)
+		exec_child(&p, fd, 1);
+	finish_parent(&p, fd, pid1, pid2);
 	return (0);
 }

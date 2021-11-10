@@ -16,7 +16,7 @@ SRC_FILES		=	pipex.c
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
 #SRC_DIR_BONUS	=	sources_bonus
-#SRC_FILES_BONUS	=	
+#SRC_FILES_BONUS	=
 #SRC_BONUS		=	$(addprefix $(SRC_DIR_BONUS)/, $(SRC_FILES_BONUS))
 
 OBJ_DIR			=	objects
@@ -28,7 +28,7 @@ OBJ				=	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 HEADER			=	pipex.h
 #HEADER_BONUS	=	pipex_bonus.h
 
-FS				=	-fsanitize=address -g3 
+FS				=	-fsanitize=address -g3
 
 all:	$(NAME)
 
@@ -70,16 +70,17 @@ fclean: clean
 re: fclean all
 
 run:
-	make && ./pipex file1.txt "grep arquivo" "tr a b" "tr b c" file2.txt
+	make && ./pipex file1.txt "grep arquivo" "tr a c" file2.txt
 
 #run_bonus:
 
 
-sanitize:	$(LIBFT) $(OBJ) $(HEADER)
-	$(CC) $(FS) $(CFLAGS) $(OBJ) -o $(NAME)
+sanitize:	$(LIBFT) $(OBJ_DIR) $(OBJ)
+	$(CC) $(CFLAGS) $(FS) $(OBJ) $(LIBFT) -o $(NAME) $(I_PIPEX) $(I_LIBFT)
+	./pipex file1.txt "grep arquivo" "tr b c" file2.txt
 
 valgrind: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all ./pipex 
+	valgrind --leak-check=full --show-leak-kinds=all ./pipex
 
 #valgrind_bonus: $(NAME_BONUS)
-	valgrind --leak-check=full --show-leak-kinds=all ./so_long_bonus ./maps_bonus/basic_bonus3.ber
+	valgrind --leak-check=full --show-leak-kinds=all ./pipex
