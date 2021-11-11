@@ -77,10 +77,10 @@ run:
 
 sanitize:	$(LIBFT) $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(FS) $(OBJ) $(LIBFT) -o $(NAME) $(I_PIPEX) $(I_LIBFT)
-	./pipex file1.txt "grep arquivo" "tr b c" file2.txt
+	./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 valgrind:
-	valgrind ./pipex file1.txt "grep arquivo" "tr a c" file2.txt
+	make && valgrind ./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 #valgrind_bonus: $(NAME_BONUS)
-	valgrind --leak-check=full --show-leak-kinds=all ./pipex
+	valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "tr e c" file2.txt

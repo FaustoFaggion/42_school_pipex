@@ -1,20 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/11 17:19:25 by fausto            #+#    #+#             */
+/*   Updated: 2021/11/11 17:20:55 by fausto           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "pipex.h"
 #include <stdio.h>
 
-int	check(t_cmd *p, int argc, char *argv[])
+void	exit_free(t_cmd *p)
 {
-	if (argc != 5)
-		return(write(1, "Enter incorrect number of arguments\n", 36));
-	p->file1 = open(argv[1], O_RDONLY);
-	if (p->file1 == -1)
-		return(write(1, "Problems to open File 1\n", 24));
-	p->file2 = open(argv[argc - 1], O_RDWR);
-	if (p->file2 == -1)
-		return(write(1, "Problems to open File 2\n", 24));
+	int	i;
+
+	i = -1;
+	while (p->exec_arg2[++i])
+		free(p->exec_arg2[i]);
+	free(p->exec_arg2);
+	i = -1;
+	while (p->my_envp[++i])
+		free(p->my_envp[i]);
+	free(p->my_envp);
+}
+
+void	cmd_setup(t_cmd *p, int x)
+{
+	int		i;
+	char	*swap;
+
+	p->exec_arg2 = ft_split(p->my_argv[x], ' ');
+	if (p->exec_arg2 == NULL)
+		exit_free(p);
+	i = 0;
+	while (p->my_envp[i])
+	{
+		p->exec_arg1 = ft_strjoin(p->my_envp[i], "/");
+		if (p->exec_arg2 == NULL)
+			exit_free(p);
+		swap = p->exec_arg1;
+		p->exec_arg1 = ft_strjoin(swap, p->exec_arg2[0]);
+		if (p->exec_arg2 == NULL)
+			exit_free(p);
+		free(swap);
+		if (access(p->exec_arg1, F_OK) == 0)
+			break ;
+		free(p->exec_arg1);
+		i++;
+	}
+}
+
+int	check(t_cmd *p, int argc, char *argv[], char *envp[])
+{
+	int	i;
+
 	p->my_argc = argc;
 	p->my_argv = argv;
 	p->exec_arg1 = NULL;
 	p->exec_arg2 = NULL;
+	if (argc != 5)
+		exit(write(1, "Enter incorrect number of arguments\n", 36));
+	p->file1 = open(argv[1], O_RDONLY);
+	if (p->file1 == -1)
+		exit(write(1, "Problems to open File 1\n", 24));
+	p->file2 = open(argv[argc - 1], O_RDWR);
+	if (p->file2 == -1)
+		exit(write(1, "Problems to open File 2\n", 24));
+	i = -1;
+	while (envp[++i])
+	{
+		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+		{
+			p->my_envp = ft_split(envp[i], ':');
+			if (p->my_envp == NULL)
+				exit(1);
+		}
+	}
 	return (0);
 }
 
@@ -22,11 +86,8 @@ int	exec_child(t_cmd *p, int fd[], int x)
 {
 	close(fd[0]);
 	if (x == 2)
-	{
 		dup2(p->file1, STDIN_FILENO);
-		printf("open %d x=%d\n", p->file1, x);
-	}
-	if (x == 3)
+	if (x == p->my_argc - 2)
 		dup2(p->file2, STDOUT_FILENO);
 	else
 		dup2(fd[1], STDOUT_FILENO);
@@ -36,7 +97,7 @@ int	exec_child(t_cmd *p, int fd[], int x)
 	return (0);
 }
 
-void	parent(t_cmd *p, int fd[])
+void	parent(t_cmd *p, int fd[], int x)
 {
 	int	i;
 
@@ -46,32 +107,38 @@ void	parent(t_cmd *p, int fd[])
 	while (p->exec_arg2[++i])
 		free(p->exec_arg2[i]);
 	free(p->exec_arg2);
+	if (x == p->my_argc - 2)
+	{
+		i = -1;
+		while (p->my_envp[++i])
+			free(p->my_envp[i]);
+		free(p->my_envp);
+	}
 	close(fd[0]);
 	close(fd[1]);
 }
 
-int	main(int argc, char *argv[])
+int	main(int argc, char *argv[], char *envp[])
 {
 	t_cmd	p;
 	int		fd[2];
 	int		pid;
 	int		x;
 
-	check(&p, argc, argv);
+	check(&p, argc, argv, envp);
 	x = 2;
 	while (x < argc - 1)
 	{
 		if (pipe(fd) == -1)
-			return(write(1, "pipe error\n", 11));
-		p.exec_arg2 = ft_split(p.my_argv[x], ' ');
-		p.exec_arg1 = ft_strjoin("/usr/bin/", p.exec_arg2[0]);
+			exit(write(1, "pipe error\n", 11));
+		cmd_setup(&p, x);
 		pid = fork();
 		if (pid < 0)
-			return(write(1, "fork error\n", 11));
+			exit(write(1, "fork error\n", 11));
 		if (pid == 0)
 			exec_child(&p, fd, x);
 		waitpid(pid, NULL, 0);
-		parent(&p, fd);
+		parent(&p, fd, x);
 		x++;
 	}
 	return (0);

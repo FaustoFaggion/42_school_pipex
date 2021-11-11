@@ -1,3 +1,3 @@
-Este arquivo
-é o arquivo 1
-file1
+Este é o arquivo 1
+Vamos testar o pipex.
+vamos torcer pra dar certo

@@ -10,6 +10,7 @@
 typedef struct s_cmd
 {
 	char	**my_argv;
+	char	**my_envp;
 	int		my_argc;
 	int		file1;
 	int		file2;
