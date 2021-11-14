@@ -6,51 +6,61 @@
 /*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 17:19:25 by fausto            #+#    #+#             */
-/*   Updated: 2021/11/11 17:20:55 by fausto           ###   ########.fr       */
+/*   Updated: 2021/11/14 13:26:05 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 #include <stdio.h>
-
+/*
 void	exit_free(t_cmd *p)
 {
 	int	i;
 
-	i = -1;
-	while (p->exec_arg2[++i])
-		free(p->exec_arg2[i]);
-	free(p->exec_arg2);
-	i = -1;
-	while (p->my_envp[++i])
-		free(p->my_envp[i]);
-	free(p->my_envp);
+	if (p->exec_arg2 != NULL)
+	{
+		i = -1;
+		while (p->exec_arg2[++i])
+			free(p->exec_arg2[i]);
+		free(p->exec_arg2);
+	}
+	if (p->my_envp != NULL)
+	{
+		i = -1;
+		while (p->my_envp[++i])
+			free(p->my_envp[i]);
+		free(p->my_envp);
+	}
+	perror(NULL);
+	exit(write(2, "já era\n", 8));
 }
-
+*/
 void	cmd_setup(t_cmd *p, int x)
 {
 	int		i;
 	char	*swap;
 
-	p->exec_arg2 = ft_split(p->my_argv[x], ' ');
+	p->exec_arg2 = ft_split_shell(p->my_argv[x], ' ');
 	if (p->exec_arg2 == NULL)
 		exit_free(p);
-	i = 0;
-	while (p->my_envp[i])
+	i = -1;
+	while (p->my_envp[++i])
 	{
 		p->exec_arg1 = ft_strjoin(p->my_envp[i], "/");
-		if (p->exec_arg2 == NULL)
+		if (p->exec_arg1 == NULL)
 			exit_free(p);
 		swap = p->exec_arg1;
 		p->exec_arg1 = ft_strjoin(swap, p->exec_arg2[0]);
-		if (p->exec_arg2 == NULL)
-			exit_free(p);
 		free(swap);
+		if (p->exec_arg1 == NULL)
+			exit_free(p);
 		if (access(p->exec_arg1, F_OK) == 0)
 			break ;
 		free(p->exec_arg1);
-		i++;
+		p->exec_arg1 = NULL;
 	}
+	if (p->exec_arg1 == NULL)
+		exit_free(p);
 }
 
 int	check(t_cmd *p, int argc, char *argv[], char *envp[])
@@ -62,21 +72,21 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	p->exec_arg1 = NULL;
 	p->exec_arg2 = NULL;
 	if (argc != 5)
-		exit(write(1, "Enter incorrect number of arguments\n", 36));
+		exit(write(2, "Enter incorrect number of arguments\n", 36));
 	p->file1 = open(argv[1], O_RDONLY);
 	if (p->file1 == -1)
-		exit(write(1, "Problems to open File 1\n", 24));
-	p->file2 = open(argv[argc - 1], O_RDWR);
+		exit(write(2, "Problems to open File 1\n", 24));
+	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
 	if (p->file2 == -1)
-		exit(write(1, "Problems to open File 2\n", 24));
+		exit(write(2, "Problems to open File 2\n", 24));
 	i = -1;
 	while (envp[++i])
 	{
-		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+		if (ft_strncmp("PATH=", envp[i], 5) == 0)
 		{
-			p->my_envp = ft_split(envp[i], ':');
+			p->my_envp = ft_split_shell(envp[i], ':');
 			if (p->my_envp == NULL)
-				exit(1);
+				exit(write(2, "ft_split error on function check\n", 33));
 		}
 	}
 	return (0);
@@ -92,8 +102,11 @@ int	exec_child(t_cmd *p, int fd[], int x)
 	else
 		dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
-	if (execve(p->exec_arg1, p->exec_arg2, NULL) < 0)
-		return (write(1, "error execve\n", 13));
+	if (execve(p->exec_arg1, p->exec_arg2, NULL) == -1)
+	{
+		write(2, "error execve\n", 13);
+		exit(1);
+	}
 	return (0);
 }
 

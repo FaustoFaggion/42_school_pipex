@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_bonus.h                                      :+:      :+:    :+:   */
+/*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/11 18:57:52 by fausto            #+#    #+#             */
-/*   Updated: 2021/11/12 12:48:44 by fausto           ###   ########.fr       */
+/*   Created: 2021/11/14 13:26:30 by fausto            #+#    #+#             */
+/*   Updated: 2021/11/14 13:26:31 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_BONUS_H
-# define PIPEX_BONUS_H
+#include "pipex.h"
 
-# include <unistd.h>
-# include <fcntl.h>
-# include <sys/wait.h>
-# include <stdlib.h> //wait()
-# include "libft.h"
+void	exit_free(t_cmd *p)
+{
+	int	i;
 
-
-#endif
+	if (p->exec_arg2 != NULL)
+	{
+		i = -1;
+		while (p->exec_arg2[++i])
+			free(p->exec_arg2[i]);
+		free(p->exec_arg2);
+	}
+	if (p->my_envp != NULL)
+	{
+		i = -1;
+		while (p->my_envp[++i])
+			free(p->my_envp[i]);
+		free(p->my_envp);
+	}
+	perror(NULL);
+	exit(write(2, "já era\n", 8));
+}

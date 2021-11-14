@@ -11,7 +11,10 @@ CC				=	clang
 CFLAGS			=	-Wall -Werror -Wextra -g
 
 SRC_DIR			=	sources
-SRC_FILES		=	pipex.c
+SRC_FILES		=	pipex.c \
+					pipex_utils.c \
+					ft_split_shell.c \
+					debug.c \
 
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
