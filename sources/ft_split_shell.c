@@ -6,7 +6,7 @@
 /*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 13:26:58 by fausto            #+#    #+#             */
-/*   Updated: 2021/11/14 14:01:33 by fausto           ###   ########.fr       */
+/*   Updated: 2021/11/14 16:19:58 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,20 @@ static void	mal_sub(char **tab, char const *s, char c, size_t nb_ptr)
 	{
 		if (*s == c)
 			s++;
-		else if (*s == '\'')
-		{
-			s++;
-			len_ptr = 0;
-			while (s[len_ptr] != '\'' && s[len_ptr] != 0)
-				len_ptr++;
-			tab[i] = ft_substr(s, 0, len_ptr);
-			if (tab[i] == NULL)
-				free_tab(tab, i);
-			s = s + len_ptr + 1;
-			i++;
-		}
-		else if (*s != c && *s != '\'')
+		else
 		{
 			len_ptr = 0;
-			while (s[len_ptr] != c && s[len_ptr] != 0)
+			if (*s == '\'')
+			{
+				s++;
+				while (s[len_ptr] != '\'' && s[len_ptr] != 0)
 				len_ptr++;
+			}
+			else if (*s != c && *s != '\'')
+			{
+				while (s[len_ptr] != c && s[len_ptr] != 0)
+					len_ptr++;
+			}
 			tab[i] = ft_substr(s, 0, len_ptr);
 			if (tab[i] == NULL)
 				free_tab(tab, i);
