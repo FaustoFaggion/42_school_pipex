@@ -6,7 +6,7 @@
 /*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:57:16 by fausto            #+#    #+#             */
-/*   Updated: 2021/11/14 13:20:42 by fausto           ###   ########.fr       */
+/*   Updated: 2021/11/14 16:50:39 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <sys/wait.h>
 # include <stdlib.h> //wait()
 # include "libft.h"
-#include <stdio.h>
+# include <stdio.h>
 
 typedef struct s_cmd
 {
@@ -34,10 +34,7 @@ typedef struct s_cmd
 
 void	exit_free(t_cmd *p);
 
-
 char	**ft_split_shell(char const *s, char c);
-
-
 
 //debug
 void	print_split(char **ptr);

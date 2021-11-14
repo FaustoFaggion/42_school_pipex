@@ -6,7 +6,7 @@
 /*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/14 13:26:58 by fausto            #+#    #+#             */
-/*   Updated: 2021/11/14 16:19:58 by fausto           ###   ########.fr       */
+/*   Updated: 2021/11/14 16:48:26 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,47 @@ static char	**free_tab(char **tab, size_t i)
 	return (tab);
 }
 
+int	len_s(char const *s, char c, int j)
+{
+	int	len_ptr;
+
+	len_ptr = 0;
+	printf("%c", s[j]);
+	if (s[j] == '\'')
+	{
+		j++;
+		while (s[len_ptr + j] != '\'' && s[len_ptr + j] != 0)
+			len_ptr++;
+	}
+	else if (s[j] != c && s[j] != '\'')
+	{
+		while (s[len_ptr + j] != c && s[len_ptr + j] != 0)
+			len_ptr++;
+	}
+	return (len_ptr);
+}
+
 static void	mal_sub(char **tab, char const *s, char c, size_t nb_ptr)
 {
 	size_t	len_ptr;
 	size_t	i;
+	size_t	j;
 
 	i = 0;
+	j = 0;
 	while (i < nb_ptr)
 	{
-		if (*s == c)
-			s++;
+		if (s[j] == c)
+			j++;
 		else
 		{
-			len_ptr = 0;
-			if (*s == '\'')
-			{
-				s++;
-				while (s[len_ptr] != '\'' && s[len_ptr] != 0)
-				len_ptr++;
-			}
-			else if (*s != c && *s != '\'')
-			{
-				while (s[len_ptr] != c && s[len_ptr] != 0)
-					len_ptr++;
-			}
-			tab[i] = ft_substr(s, 0, len_ptr);
+			len_ptr = len_s(s, c, j);
+			if (s[j] == '\'')
+				j++;
+			tab[i] = ft_substr(s, j, len_ptr);
 			if (tab[i] == NULL)
 				free_tab(tab, i);
-			s = s + len_ptr;
+			j = j + len_ptr;
 			i++;
 		}
 	}
