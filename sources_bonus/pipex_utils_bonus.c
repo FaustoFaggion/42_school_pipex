@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
+/*   By: fausto <fausto@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/14 13:26:30 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/19 18:24:18 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/11/15 09:57:13 by fausto            #+#    #+#             */
+/*   Updated: 2021/11/15 09:57:14 by fausto           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 void	exit_free(t_cmd *p)
 {
@@ -31,5 +31,5 @@ void	exit_free(t_cmd *p)
 		free(p->my_envp);
 	}
 	perror(NULL);
-	exit(write(2, "Error\n", 6));
+	exit(write(2, "já era\n", 8));
 }

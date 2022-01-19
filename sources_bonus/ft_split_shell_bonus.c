@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_split_shell.c                                   :+:      :+:    :+:   */
+/*   ft_split_shell_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/14 13:26:58 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/19 18:26:17 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/11/15 09:57:37 by fausto            #+#    #+#             */
+/*   Updated: 2022/01/19 18:27:11 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 static size_t	ft_ptr_count_shell(char const *s, char c)
 {
