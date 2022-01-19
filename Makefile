@@ -76,7 +76,7 @@ run:
 	make && ./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 run_bonus:
-	make bonus && ./pipex_bonus file1.txt "tr a b" "tr e c" file2.txt
+	make bonus && ./pipex_bonus here_doc "limiter" "tr a b" "tr e c" file2.txt
 
 sanitize:	$(LIBFT) $(OBJ_DIR) $(OBJ)
 	$(CC) $(CFLAGS) $(FS) $(OBJ) $(LIBFT) -o $(NAME) $(I_PIPEX) $(I_LIBFT)

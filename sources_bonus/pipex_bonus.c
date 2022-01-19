@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/19 18:30:55 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/19 20:16:15 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,12 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	p->exec_arg2 = NULL;
 	if (argc < 3)
 		exit(write(2, "Enter incorrect number of arguments\n", 36));
-	p->file1 = open(argv[1], O_RDONLY);
-	if (p->file1 == -1)
-		exit(write(2, "Problems to open File 1\n", 24));
+	if (ft_strncmp("here_doc", argv[1], 8) != 0)
+	{
+		p->file1 = open(argv[1], O_RDONLY);
+		if (p->file1 == -1)
+			exit(write(2, "Problems to open File 1\n", 24));
+	}
 	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
 	if (p->file2 == -1)
 		exit(write(2, "Problems to open File 2\n", 24));
@@ -114,11 +117,25 @@ int	main(int argc, char *argv[], char *envp[])
 	int		fd[2];
 	int		pid;
 	int		x;
-
+	char	*line;
+	
 	check(&p, argc, argv, envp);
-	x = 2;
+	if (ft_strncmp("here_doc", argv[1], 8) == 0)
+	{
+		if (pipe(fd) == -1)
+			exit(write(1, "pipe error\n", 11));
+		line = ft_get_next_line(STDIN_FILENO);
+		write(fd[1], line, ft_strlen(line));
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[1]);
+		close(fd[0]);
+		x = 3;
+	}
+	else
+		x = 2;
 	while (x < argc - 1)
 	{
+		dprintf(2, "x = %d", x);
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
 		cmd_setup(&p, x);

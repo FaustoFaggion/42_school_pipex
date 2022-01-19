@@ -1,4 +1,1 @@
-cstc brquivo
-brquivo 1
-filc
-bbnnnnnnnnnnbb
+bbbbbbcccccccc
