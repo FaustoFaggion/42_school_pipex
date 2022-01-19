@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/19 20:16:15 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/19 20:35:49 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,8 +124,14 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
-		line = ft_get_next_line(STDIN_FILENO);
-		write(fd[1], line, ft_strlen(line));
+		while (1)
+		{
+			write(1, "> ", 2);
+			line = ft_get_next_line(STDIN_FILENO);
+			if (ft_strncmp(argv[2], line, ft_strlen(argv[2])) == 0)
+				break;
+			write(fd[1], line, ft_strlen(line));
+		}
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[1]);
 		close(fd[0]);
