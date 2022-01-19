@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:33 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/19 18:35:16 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/19 20:55:26 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ typedef struct s_cmd
 void	exit_free(t_cmd *p);
 
 char	**ft_split_shell(char const *s, char c);
+
+void	here_doc(int fd[], char	*argv[]);
 
 //debug
 void	print_split(char **ptr);

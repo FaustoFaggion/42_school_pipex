@@ -22,6 +22,7 @@ SRC_DIR_BONUS	=	sources_bonus
 SRC_FILES_BONUS	=	pipex_bonus.c \
 					pipex_utils_bonus.c \
 					ft_split_shell_bonus.c \
+					here_doc.c \
 
 SRC_BONUS		=	$(addprefix $(SRC_DIR_BONUS)/, $(SRC_FILES_BONUS))
 
