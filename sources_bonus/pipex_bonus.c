@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/19 20:54:38 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/19 21:19:04 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,7 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	if (argc < 3)
 		exit(write(2, "Enter incorrect number of arguments\n", 36));
 	if (ft_strncmp("here_doc", argv[1], 8) != 0)
-	{
-		p->file1 = open(argv[1], O_RDONLY);
-		if (p->file1 == -1)
-			exit(write(2, "Problems to open File 1\n", 24));
-	}
+		not_here_doc(p, argv);
 	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
 	if (p->file2 == -1)
 		exit(write(2, "Problems to open File 2\n", 24));
@@ -117,18 +113,11 @@ int	main(int argc, char *argv[], char *envp[])
 	int		fd[2];
 	int		pid;
 	int		x;
-	
+
 	check(&p, argc, argv, envp);
-	if (ft_strncmp("here_doc", argv[1], 8) == 0)
-	{
-		here_doc(fd, argv);
-		x = 3;
-	}
-	else
-		x = 2;
+	x = here_doc(fd, argv);
 	while (x < argc - 1)
 	{
-		dprintf(2, "x = %d", x);
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
 		cmd_setup(&p, x);

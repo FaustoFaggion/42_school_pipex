@@ -1,2 +1,4 @@
-dfsffd limitcr
-c
+cstc brquivo
+brquivo 1
+filc
+bbnnnnnnnnnnbb
