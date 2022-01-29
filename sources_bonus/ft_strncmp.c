@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlcat.c                                       :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/13 15:17:55 by fagiusep          #+#    #+#             */
-/*   Updated: 2021/08/13 15:17:55 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/08/13 15:18:28 by fagiusep          #+#    #+#             */
+/*   Updated: 2021/08/13 15:18:28 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex_bonus.h"
+#include <stdio.h>
 
-size_t	ft_strlcat(char *dest, const char *src, size_t dstsize)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	size_t	i;
-	size_t	len;
+	unsigned char	*str1;
+	unsigned char	*str2;
+	size_t			i;
 
-	len = ft_strlen(dest);
-	if (dstsize <= len)
-		return (dstsize + ft_strlen(src));
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
 	i = 0;
-	if (dstsize > len)
+	if (n == 0)
+		return ((int)n);
+	while (i < n)
 	{
-		while ((dstsize - len) > 1 && src[i] != '\0')
-		{
-			dest[len + i] = src[i];
-			i++;
-			dstsize--;
-		}
-		dest[len + i] = '\0';
+		if (str1[i] == '\0' && str2[i] == '\0')
+			return (0);
+		if ((str1[i] != str2[i]))
+			return ((int)(str1[i] - str2[i]));
+		i++;
 	}
-	return (len + ft_strlen(src));
+	return (0);
 }

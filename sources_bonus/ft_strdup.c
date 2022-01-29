@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/14 13:26:30 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/19 18:24:18 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/08/13 15:17:31 by fagiusep          #+#    #+#             */
+/*   Updated: 2022/01/29 12:36:03 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-void	exit_free(t_cmd *p)
+/*Falta entender strcpy para colocar nessa função*/
+char	*ft_strdup(const char *s)
 {
-	int	i;
+	size_t	len;
+	size_t	i;
+	char	*mem;
 
-	if (p->exec_arg2 != NULL)
+	i = 0;
+	len = ft_strlen(s);
+	mem = (char *)malloc(sizeof(char) * (len + 1));
+	if (!mem)
+		return (NULL);
+	while (s[i] != '\0')
 	{
-		i = -1;
-		while (p->exec_arg2[++i])
-			free(p->exec_arg2[i]);
-		free(p->exec_arg2);
+		mem[i] = s[i];
+		++i;
 	}
-	if (p->my_envp != NULL)
-	{
-		i = -1;
-		while (p->my_envp[++i])
-			free(p->my_envp[i]);
-		free(p->my_envp);
-	}
-	perror(NULL);
-	exit(write(2, "Error\n", 6));
+	mem[i] = '\0';
+	return (mem);
 }

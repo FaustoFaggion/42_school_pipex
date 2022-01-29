@@ -1,9 +1,6 @@
 NAME			=	pipex
 NAME_BONUS		=	pipex_bonus
 
-PATH_LIBFT		=	./libft
-LIBFT			=	$(PATH_LIBFT)/libft.a
-
 I_LIBFT			=	-I ./libft
 I_PIPEX			=	-I ./include
 
@@ -14,7 +11,12 @@ SRC_DIR			=	sources
 SRC_FILES		=	pipex.c \
 					pipex_utils.c \
 					ft_split_shell.c \
-					debug.c \
+					ft_strjoin.c \
+					ft_strlen.c \
+					ft_strlcpy.c \
+					ft_strncmp.c \
+					ft_substr.c \
+					ft_strdup.c
 
 SRC				=	$(addprefix $(SRC_DIR)/, $(SRC_FILES))
 
@@ -23,6 +25,14 @@ SRC_FILES_BONUS	=	pipex_bonus.c \
 					pipex_utils_bonus.c \
 					ft_split_shell_bonus.c \
 					here_doc.c \
+					ft_strjoin.c \
+					ft_strlen.c \
+					ft_strlcpy.c \
+					ft_strncmp.c \
+					ft_substr.c \
+					ft_strdup.c \
+					ft_get_next_line.c \
+					ft_strchr.c
 
 SRC_BONUS		=	$(addprefix $(SRC_DIR_BONUS)/, $(SRC_FILES_BONUS))
 
@@ -38,20 +48,17 @@ all:	$(NAME)
 
 bonus:	$(NAME_BONUS)
 
-$(NAME):	$(LIBFT) $(OBJ_DIR) $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME) $(I_PIPEX) $(I_LIBFT)
+$(NAME):	$(OBJ_DIR) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(I_PIPEX)
 
-$(NAME_BONUS):	$(LIBFT) $(OBJ_DIR_BONUS) $(OBJ_BONUS)
-	$(CC) $(CFLAGS) $(OBJ_BONUS) $(LIBFT) -o $(NAME_BONUS) $(I_PIPEX) $(I_LIBFT)
+$(NAME_BONUS):	$(OBJ_DIR_BONUS) $(OBJ_BONUS)
+	$(CC) $(CFLAGS) $(OBJ_BONUS) -o $(NAME_BONUS) $(I_PIPEX)
 
 $(OBJ_DIR)/%.o:	$(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(I_PIPEX) $(I_LIBFT)
+	$(CC) $(CFLAGS) -c $< -o $@ $(I_PIPEX)
 
 $(OBJ_DIR_BONUS)/%.o:	$(SRC_DIR_BONUS)/%.c
-	$(CC) $(CFLAGS) -c $< -o $@ $(I_PIPEX) $(I_LIBFT)
-
-$(LIBFT):
-	make -C $(PATH_LIBFT)
+	$(CC) $(CFLAGS) -c $< -o $@ $(I_PIPEX)
 
 $(OBJ_DIR):
 	mkdir objects
@@ -64,27 +71,25 @@ clean:
 	rm -rf $(OBJ_DIR)
 	rm -rf $(OBJ_BONUS)
 	rm -rf $(OBJ_DIR_BONUS)
-	make -C $(PATH_LIBFT) clean
 
 fclean: clean
 	rm -rf $(NAME)
 	rm -rf $(NAME_BONUS)
-	make -C $(PATH_LIBFT) fclean
 
 re: fclean all
 
 run:
-	make && ./pipex file1.txt "tr a b" "tr e c" file2.txt
+	make && ./pipex file1.txt "wc -l" "cat" file2.txt
 
 run_bonus:
-	make bonus && ./pipex_bonus file1.txt "tr a b" "tr e c" file2.txt
+	make bonus && ./pipex_bonus file1.txt "tr a Z" "tr e c" file2.txt
 
-sanitize:	$(LIBFT) $(OBJ_DIR) $(OBJ)
-	$(CC) $(CFLAGS) $(FS) $(OBJ) $(LIBFT) -o $(NAME) $(I_PIPEX) $(I_LIBFT)
+sanitize:	$(OBJ_DIR) $(OBJ)
+	$(CC) $(CFLAGS) $(FS) $(OBJ) -o $(NAME) $(I_PIPEX)
 	./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 valgrind:
-	make && valgrind ./pipex file1.txt "tr a b" "tr e c" file2.txt
+	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "tr e f" file2.txt
 
-#valgrind_bonus: $(NAME_BONUS)
-	valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "tr e c" file2.txt
+valgrind_bonus: $(NAME_BONUS)
+	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus file1.txt "tr a b" "tr e c" file2.txt

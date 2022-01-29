@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memmove.c                                       :+:      :+:    :+:   */
+/*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/13 15:16:08 by fagiusep          #+#    #+#             */
-/*   Updated: 2021/08/13 15:16:08 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/08/13 15:18:02 by fagiusep          #+#    #+#             */
+/*   Updated: 2021/08/13 15:18:02 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex_bonus.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize)
 {
-	unsigned char	*s;
-	unsigned char	*d;
-	int				i;
+	size_t	i;
 
-	s = (unsigned char *)src;
-	d = (unsigned char *)dest;
-	i = n ;
-	if (d > s)
+	if (!dest || !src)
+		return (0);
+	i = 0;
+	if (dstsize < 1)
+		return (ft_strlen(src));
+	while (dstsize > 1 && src[i] != '\0')
 	{
-		while (i > 0)
-		{
-			d[i - 1] = s[i - 1];
-			i--;
-		}
-		return (dest);
+		dest[i] = src[i];
+		i++;
+		dstsize--;
 	}
-	ft_memcpy(d, s, n);
-	return (dest);
+	dest[i] = '\0';
+	return (ft_strlen(src));
 }

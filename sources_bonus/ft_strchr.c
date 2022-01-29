@@ -1,18 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd.c                                     :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/13 15:17:03 by fagiusep          #+#    #+#             */
-/*   Updated: 2021/08/13 15:17:03 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/08/13 15:17:18 by fagiusep          #+#    #+#             */
+/*   Updated: 2021/08/13 15:17:18 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex_bonus.h"
 
-void	ft_putstr_fd(char *s, int fd)
+char	*ft_strchr(const char *s, int c)
 {
-	write (fd, s, ft_strlen(s));
+	while (*(char *)s != '\0')
+	{
+		if (*(char *)s == (char)c)
+			return ((char *)s);
+		s++;
+	}
+	if (*(char *)s == (char)c)
+		return ((char *)s);
+	return (NULL);
 }

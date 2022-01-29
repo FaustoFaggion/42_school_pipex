@@ -1,33 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/08/13 15:17:46 by fagiusep          #+#    #+#             */
-/*   Updated: 2021/08/13 15:17:46 by fagiusep         ###   ########.fr       */
+/*   Created: 2021/08/13 15:19:12 by fagiusep          #+#    #+#             */
+/*   Updated: 2021/08/13 15:19:12 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "pipex_bonus.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*new;
-	size_t	tot_size;
-	size_t	len_s1;
-	size_t	len_s2;
+	char	*substr;
+	size_t	size;
 
-	if (s1 == NULL || s2 == NULL)
+	if (s == NULL)
 		return (NULL);
-	len_s1 = ft_strlen(s1);
-	len_s2 = ft_strlen(s2);
-	tot_size = (len_s1 + len_s2 + 1);
-	new = (char *)malloc(tot_size * sizeof(char));
-	if (!new)
+	if (start > ft_strlen(s))
+		return (ft_strdup(""));
+	if ((ft_strlen(s) - start) < len)
+		size = (ft_strlen(s) - start) + 1;
+	else
+		size = len + 1;
+	substr = (char *)malloc(size * sizeof(char));
+	if (!substr)
+	{
 		return (NULL);
-	ft_strlcpy(new, s1, (len_s1 + 1));
-	ft_strlcpy(&new[len_s1], s2, (len_s2 + 1));
-	return (new);
+	}
+	ft_strlcpy(substr, &s[start], size);
+	return (substr);
 }
