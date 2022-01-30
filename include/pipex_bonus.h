@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:33 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/29 12:35:13 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 19:57:28 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,7 @@ char	*ft_strdup(const char *s);
 char	*ft_get_next_line(int fd);
 
 char	*ft_strchr(const char *s, int c);
+
+int	check(t_cmd *p, int argc, char *argv[], char *envp[]);
 
 #endif

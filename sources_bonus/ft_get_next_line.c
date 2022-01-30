@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/08/23 10:17:40 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/29 12:35:44 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 19:14:33 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,16 @@ char	*ft_get_next_line(int fd)
 	char		*line;
 	char		*buff;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	if (!backup)
 	{
 		backup = ft_strdup("");
 		if (!backup)
 			return (NULL);
+	}
+	if (fd < 0 || BUFFER_SIZE <= 0)
+	{
+		free(backup);
+		return (NULL);
 	}
 	buff = (char *)malloc(BUFFER_SIZE + 1);
 	line = gnl_prep_line(fd, &backup, &buff);

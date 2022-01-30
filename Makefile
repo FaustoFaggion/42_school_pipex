@@ -32,7 +32,8 @@ SRC_FILES_BONUS	=	pipex_bonus.c \
 					ft_substr.c \
 					ft_strdup.c \
 					ft_get_next_line.c \
-					ft_strchr.c
+					ft_strchr.c \
+					check.c
 
 SRC_BONUS		=	$(addprefix $(SRC_DIR_BONUS)/, $(SRC_FILES_BONUS))
 
@@ -92,4 +93,4 @@ valgrind:
 	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "ls" file2.txt
 
 valgrind_bonus: $(NAME_BONUS)
-	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus file1.txt "tr a b" "tr e c" file2.txt
+	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus here_doc ok "tr a b" "tr e c" file2.txt
