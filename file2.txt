@@ -1,9 +1,10 @@
-Makefile
-file.txt
-file1.txt
-file2.txt
-file3.txt
-include
+bbbbbbbbbbbb
+
+eeeeeeeeeee
+
+bbbbbbbbbbbb
+CCCCC
+ddddclude
 objects
 pipex
 pipex-tester

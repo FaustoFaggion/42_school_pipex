@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:57:16 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/30 13:49:14 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 15:34:30 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/wait.h>
 # include <stdlib.h>
 # include <stdio.h>
+# include <errno.h>
 
 typedef struct s_cmd
 {
@@ -29,6 +30,7 @@ typedef struct s_cmd
 	char	*exec_arg1;
 	char	*swap;
 	char	**exec_arg2;
+	int		file_error;
 }				t_cmd;
 
 void	exit_free(t_cmd *p);
@@ -48,5 +50,7 @@ char	*ft_strdup(const char *s);
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 void cmd_not_found(t_cmd *, int x);
+
+void check_envp(t_cmd *p, char *envp[], int i);
 
 #endif

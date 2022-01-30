@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 13:48:57 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 16:55:55 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,10 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	p->my_argv = argv;
 	p->exec_arg1 = NULL;
 	p->exec_arg2 = NULL;
+	p->file_error = 0;
 	if (argc != 5)
 	{
 		write(2, "Enter incorrect number of arguments\n", 36);
-		exit(1);
-	}
-	p->file1 = open(argv[1], O_RDONLY);
-	if (p->file1 == -1)
-	{
-		perror(argv[1]);
 		exit(1);
 	}
 	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
@@ -67,16 +62,12 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	}
 	i = -1;
 	while (envp[++i])
+		check_envp(p, envp, i);
+	p->file1 = open(argv[1], O_RDONLY);
+	if (p->file1 == -1)
 	{
-		if (ft_strncmp("PATH=", envp[i], 5) == 0)
-		{
-			p->my_envp = ft_split_shell(envp[i], ':');
-			if (p->my_envp == NULL)
-			{
-				write(2, "ft_split error on function check\n", 33);
-				exit(1);
-			}
-		}
+		perror(argv[1]);
+		p->file_error = 1;
 	}
 	return (0);
 }
@@ -102,7 +93,8 @@ int	exec_child(t_cmd *p, int fd[], int x)
 void	parent(t_cmd *p, int fd[], int x)
 {
 	int	i;
-
+	
+	p->file_error = 0;
 	dup2(fd[0], STDIN_FILENO);
 	free(p->exec_arg1);
 	i = -1;
@@ -136,7 +128,7 @@ int	main(int argc, char *argv[], char *envp[])
 			write(1, "pipe error\n", 11);
 			exit(1);
 		}
-		if (cmd_setup(&p, x) == 0)
+		if (cmd_setup(&p, x) == 0 && p.file_error == 0)
 		{
 			pid = fork();
 			if (pid < 0)
