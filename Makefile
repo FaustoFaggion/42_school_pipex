@@ -79,7 +79,7 @@ fclean: clean
 re: fclean all
 
 run:
-	make && ./pipex file1.txt "wc -l" "cat" file2.txt
+	make && ./pipex file1.txt "tr a R" "tr e H" file2.txt
 
 run_bonus:
 	make bonus && ./pipex_bonus file1.txt "tr a Z" "tr e c" file2.txt
@@ -89,7 +89,7 @@ sanitize:	$(OBJ_DIR) $(OBJ)
 	./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 valgrind:
-	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "tr e f" file2.txt
+	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file10.txt "tr a b" "t e f" file2.txt
 
 valgrind_bonus: $(NAME_BONUS)
 	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus file1.txt "tr a b" "tr e c" file2.txt

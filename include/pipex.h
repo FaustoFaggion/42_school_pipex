@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:57:16 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/29 14:04:01 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 10:26:27 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,5 +44,7 @@ size_t	ft_strlcpy(char *dest, const char *src, size_t dstsize);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 
 char	*ft_strdup(const char *s);
+
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
 
 #endif
