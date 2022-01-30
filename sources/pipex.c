@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 16:55:55 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 17:15:47 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,10 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 		write(2, "Enter incorrect number of arguments\n", 36);
 		exit(1);
 	}
-	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
-	if (p->file2 == -1)
-	{
-		perror(argv[argc - 1]);
-		exit(1);
-	}
+	check_open_files(p, argv, argc);
 	i = -1;
 	while (envp[++i])
 		check_envp(p, envp, i);
-	p->file1 = open(argv[1], O_RDONLY);
-	if (p->file1 == -1)
-	{
-		perror(argv[1]);
-		p->file_error = 1;
-	}
 	return (0);
 }
 
@@ -93,7 +82,7 @@ int	exec_child(t_cmd *p, int fd[], int x)
 void	parent(t_cmd *p, int fd[], int x)
 {
 	int	i;
-	
+
 	p->file_error = 0;
 	dup2(fd[0], STDIN_FILENO);
 	free(p->exec_arg1);
@@ -124,18 +113,12 @@ int	main(int argc, char *argv[], char *envp[])
 	while (x < argc - 1)
 	{
 		if (pipe(fd) == -1)
-		{
-			write(1, "pipe error\n", 11);
-			exit(1);
-		}
+			exit(write(1, "pipe error\n", 11));
 		if (cmd_setup(&p, x) == 0 && p.file_error == 0)
 		{
 			pid = fork();
 			if (pid < 0)
-			{
-				write(1, "fork error\n", 11);
-				exit(1);
-			}
+				exit(write(1, "fork error\n", 11));
 			if (pid == 0)
 				exec_child(&p, fd, x);
 			waitpid(pid, NULL, 0);
