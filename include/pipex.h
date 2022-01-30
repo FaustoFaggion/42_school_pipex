@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:57:16 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/30 10:26:27 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 13:49:14 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,5 +46,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strdup(const char *s);
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n);
+
+void cmd_not_found(t_cmd *, int x);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 09:57:13 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/30 10:54:18 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 13:50:51 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,13 @@ void	exit_free(t_cmd *p)
 			free(p->my_envp[i]);
 		free(p->my_envp);
 	}
-	perror(NULL);
-	write(2, "Error\nExit program!\n", 23);
-	exit(1);
+	exit(127);
+}
+
+void cmd_not_found(t_cmd *p, int x)
+{
+	write(1, p->exec_arg2[0], ft_strlen(p->exec_arg2[0]));
+	write(1, ": Command not found\n", 20);
+	if (x == (p->my_argc - 2))
+		exit_free(p);
 }

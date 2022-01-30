@@ -6,13 +6,13 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 10:58:51 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/30 13:48:57 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int	cmd_setup(t_cmd *p, int x, int argc)
+int	cmd_setup(t_cmd *p, int x)
 {
 	int		i;
 	char	*swap;
@@ -36,10 +36,7 @@ int	cmd_setup(t_cmd *p, int x, int argc)
 		free(p->exec_arg1);
 		p->exec_arg1 = NULL;
 	}
-	write(1, p->exec_arg2[0], ft_strlen(p->exec_arg2[0]));
-	write(1, ": Commando invalido\n", 20);
-	if (x == (argc - 2))
-		exit_free(p);
+	cmd_not_found(p, x);
 	return (1);
 }
 
@@ -59,13 +56,13 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	p->file1 = open(argv[1], O_RDONLY);
 	if (p->file1 == -1)
 	{
-		write(2, "Arquivo ou diretório inexistente\n", 33);
+		perror(argv[1]);
 		exit(1);
 	}
 	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
 	if (p->file2 == -1)
 	{
-		write(2, "Problems to open File 2\n", 24);
+		perror(argv[argc - 1]);
 		exit(1);
 	}
 	i = -1;
@@ -139,7 +136,7 @@ int	main(int argc, char *argv[], char *envp[])
 			write(1, "pipe error\n", 11);
 			exit(1);
 		}
-		if (cmd_setup(&p, x, argc) == 0)
+		if (cmd_setup(&p, x) == 0)
 		{
 			pid = fork();
 			if (pid < 0)
