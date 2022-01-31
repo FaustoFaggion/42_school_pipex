@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 09:57:13 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/30 17:10:19 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 19:46:19 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	check_open_files(t_cmd *p, char *argv[], int argc)
 	{
 		perror(argv[1]);
 		p->file_error = 1;
+		if (errno != 13)
+			p->error_return = 1;
 	}
 }
 

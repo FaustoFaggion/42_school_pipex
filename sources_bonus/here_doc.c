@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 20:54:22 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 19:47:22 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:13:09 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,9 @@ void	not_here_doc(t_cmd *p, char *argv[])
 	p->file1 = open(argv[1], O_RDONLY);
 	if (p->file1 == -1)
 	{
-		write(2, "Problems to open File 1\n", 24);
-		exit(1);
+		perror(argv[1]);
+		p->file_error = 1;
+		if (errno != 13)
+			p->error_return = 1;
 	}
 }

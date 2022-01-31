@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/11 18:57:16 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/30 17:18:46 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 19:44:11 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_cmd
 	char	*swap;
 	char	**exec_arg2;
 	int		file_error;
+	int		error_return;
 }				t_cmd;
 
 void	exit_free(t_cmd *p);

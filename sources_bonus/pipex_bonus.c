@@ -6,13 +6,13 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 19:50:10 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:27:31 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	cmd_setup(t_cmd *p, int x)
+static int	cmd_setup(t_cmd *p, int x)
 {
 	int		i;
 	char	*swap;
@@ -32,12 +32,13 @@ void	cmd_setup(t_cmd *p, int x)
 		if (p->exec_arg1 == NULL)
 			exit_free(p);
 		if (access(p->exec_arg1, F_OK) == 0)
-			break ;
+			return (0);
 		free(p->exec_arg1);
 		p->exec_arg1 = NULL;
 	}
-	if (p->exec_arg1 == NULL)
-		exit_free(p);
+	cmd_not_found(p, x);
+	return (1);
+
 }
 
 int	exec_child(t_cmd *p, int fd[], int x)
@@ -62,6 +63,7 @@ void	parent(t_cmd *p, int fd[], int x)
 {
 	int	i;
 
+	p->file_error = 0;
 	dup2(fd[0], STDIN_FILENO);
 	free(p->exec_arg1);
 	i = -1;
@@ -92,15 +94,19 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
-		cmd_setup(&p, x);
-		pid = fork();
-		if (pid < 0)
-			exit(write(1, "fork error\n", 11));
-		if (pid == 0)
-			exec_child(&p, fd, x);
-		waitpid(pid, NULL, 0);
+		if(cmd_setup(&p, x) == 0 && p.file_error == 0)
+		{
+			pid = fork();
+			if (pid < 0)
+				exit(write(1, "fork error\n", 11));
+			if (pid == 0)
+				exec_child(&p, fd, x);
+			waitpid(pid, NULL, 0);
+		}
 		parent(&p, fd, x);
 		x++;
 	}
+	if (p.error_return == 1)
+		return (1);
 	return (0);
 }

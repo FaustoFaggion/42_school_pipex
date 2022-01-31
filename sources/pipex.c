@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/30 17:15:47 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 19:50:26 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 	p->exec_arg1 = NULL;
 	p->exec_arg2 = NULL;
 	p->file_error = 0;
+	p->error_return = 0;
 	if (argc != 5)
 	{
 		write(2, "Enter incorrect number of arguments\n", 36);
@@ -109,8 +110,8 @@ int	main(int argc, char *argv[], char *envp[])
 	int		x;
 
 	check(&p, argc, argv, envp);
-	x = 2;
-	while (x < argc - 1)
+	x = 1;
+	while (++x < argc - 1)
 	{
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
@@ -124,7 +125,8 @@ int	main(int argc, char *argv[], char *envp[])
 			waitpid(pid, NULL, 0);
 		}
 		parent(&p, fd, x);
-		x++;
 	}
+	if (p.error_return == 1)
+		return (1);
 	return (0);
 }
