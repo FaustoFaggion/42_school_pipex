@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 18:20:41 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/31 20:27:31 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:35:10 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ static int	cmd_setup(t_cmd *p, int x)
 	}
 	cmd_not_found(p, x);
 	return (1);
-
 }
 
 int	exec_child(t_cmd *p, int fd[], int x)
@@ -90,11 +89,11 @@ int	main(int argc, char *argv[], char *envp[])
 
 	check(&p, argc, argv, envp);
 	x = here_doc(fd, argv);
-	while (x < argc - 1)
+	while (++x < argc - 1)
 	{
 		if (pipe(fd) == -1)
 			exit(write(1, "pipe error\n", 11));
-		if(cmd_setup(&p, x) == 0 && p.file_error == 0)
+		if (cmd_setup(&p, x) == 0 && p.file_error == 0)
 		{
 			pid = fork();
 			if (pid < 0)
@@ -104,7 +103,6 @@ int	main(int argc, char *argv[], char *envp[])
 			waitpid(pid, NULL, 0);
 		}
 		parent(&p, fd, x);
-		x++;
 	}
 	if (p.error_return == 1)
 		return (1);

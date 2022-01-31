@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 20:54:22 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/31 20:13:09 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/01/31 20:34:48 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ int	here_doc(int fd[], char	*argv[])
 		dup2(fd[0], STDIN_FILENO);
 		close(fd[1]);
 		close(fd[0]);
-		return (3);
+		return (2);
 	}
-	return (2);
+	return (1);
 }
 
 void	not_here_doc(t_cmd *p, char *argv[])

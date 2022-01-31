@@ -93,4 +93,4 @@ valgrind:
 	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "ls" file2.txt
 
 valgrind_bonus: $(NAME_BONUS)
-	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus file1.txt "tr a b" "tr e W" "tr d T" file2.txt
+	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus here_doc ok "tr a b" "tr e W" "tr d T" file2.txt
