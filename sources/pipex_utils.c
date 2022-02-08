@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 09:57:13 by fausto            #+#    #+#             */
-/*   Updated: 2022/01/31 19:46:19 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/02/08 10:01:26 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	cmd_not_found(t_cmd *p, int x)
 
 void	check_open_files(t_cmd *p, char *argv[], int argc)
 {
-	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
+	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (p->file2 == -1)
 	{
 		perror(argv[argc - 1]);

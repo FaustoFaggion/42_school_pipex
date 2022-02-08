@@ -6,7 +6,7 @@
 /*   By: fagiusep <fagiusep@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/30 19:50:59 by fagiusep          #+#    #+#             */
-/*   Updated: 2022/01/31 20:17:21 by fagiusep         ###   ########.fr       */
+/*   Updated: 2022/02/08 10:21:21 by fagiusep         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,10 @@ int	check(t_cmd *p, int argc, char *argv[], char *envp[])
 		write(2, "Enter incorrect number of arguments\n", 36);
 		exit(1);
 	}
-	p->file2 = open(argv[argc - 1], O_RDWR | O_CREAT, 0777);
+	if (ft_strncmp("here_doc", argv[1], 8) == 0)
+		p->file2 = open(argv[argc - 1], O_RDWR | O_APPEND | O_CREAT, 0777);
+	else
+		p->file2 = open(argv[argc - 1], O_RDWR | O_TRUNC | O_CREAT, 0777);
 	if (p->file2 == -1)
 	{
 		perror(argv[argc - 1]);

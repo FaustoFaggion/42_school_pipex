@@ -90,7 +90,10 @@ sanitize:	$(OBJ_DIR) $(OBJ)
 	./pipex file1.txt "tr a b" "tr e c" file2.txt
 
 valgrind:
-	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "ls" file2.txt
+	make && valgrind --leak-check=full --show-leak-kinds=all ./pipex file1.txt "tr a b" "tr b V" file2.txt
 
-valgrind_bonus: $(NAME_BONUS)
+valgrind_bonus_here_doc: $(NAME_BONUS)
 	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus here_doc ok "tr a b" "tr e W" "tr d T" file2.txt
+
+valgrind_bonus_file1: $(NAME_BONUS)
+	make bonus && valgrind --leak-check=full --show-leak-kinds=all ./pipex_bonus  file1.txt "tr a b" "tr e W" "tr d T" file2.txt
